@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe</title>
+    <style>
+        * {
+            background-image: url('hotel1.jpeg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%;
+        }
+        body {
+            font-family: 'Times New Roman', Arial, sans-serif;
+        }
+        h1 {
+            color:black;
+            text-shadow: 2px 2px 4px white;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        button {
+            text-align: center;
+        }
+        
+    </style>
+    <script>
+        let recipes = [];
+
+        function showForm() {
+            document.getElementById('recipe-form').classList.toggle('hidden');
+        }
+
+        function addRecipe() {
+            const name = document.getElementById('recipe-name').value;
+            const ingredients = document.getElementById('recipe-ingredients').value;
+            const instructions = document.getElementById('recipe-instructions').value;
+
+            if (name && ingredients && instructions) {
+                const recipe = {
+                    name: name,
+                    ingredients: ingredients,
+                    instructions: instructions
+                };
+                recipes.push(recipe);
+                displayRecipes();
+                clearForm();
+            }
+        }
+
+        function displayRecipes() {
+            const recipeTable = document.getElementById('recipe-table');
+            const recipeList = document.getElementById('recipe');
+            recipeTable.classList.remove('hidden');
+            recipeList.innerHTML = '';
+            recipes.forEach((recipe, index) => {
+                const row = recipeList.insertRow();
+                const nameCell = row.insertCell(0);
+                const ingredientsCell = row.insertCell(1);
+                const instructionsCell = row.insertCell(2);
+                const actionCell = row.insertCell(3);
+
+                nameCell.innerHTML = recipe.name;
+                ingredientsCell.innerHTML = recipe.ingredients;
+                instructionsCell.innerHTML = recipe.instructions;
+                actionCell.innerHTML = '<button onclick="editRecipe(' + index + ')">Edit</button> <button onclick="deleteRecipe(' + index + ')">Delete</button>';
+            });
+        }
+
+        function editRecipe(index) {
+            const recipe = recipes[index];
+            document.getElementById('recipe-name').value = recipe.name;
+            document.getElementById('recipe-ingredients').value = recipe.ingredients;
+            document.getElementById('recipe-instructions').value = recipe.instructions;
+            recipes.splice(index, 1);
+            displayRecipes();
+        }
+
+        function deleteRecipe(index) {
+            recipes.splice(index, 1);
+            displayRecipes();
+        }
+
+        function clearForm() {
+            document.getElementById('recipe-name').value = '';
+            document.getElementById('recipe-ingredients').value = '';
+            document.getElementById('recipe-instructions').value = '';
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1><marquee direction="right">My Recipe Box</marquee></h1>
+    <div id="recipe-list"></div>
+    <h2 style="color: blue;">A recipe is a set of instructions that describes how to prepare or make something, especially a dish of prepared food.</h2>
+    <h2>Now Add a Recipe</h2>
+    <button onclick="showForm()">Add New Recipe</button>
+    <form action="#">
+        <div id="recipe-form" class="hidden">
+            <h2>Add Recipe</h2>
+            <input type="text" id="recipe-name" placeholder="Recipe Name" required><br><br>
+            <textarea id="recipe-ingredients" placeholder="Ingredients" required></textarea><br><br>
+            <textarea id="recipe-instructions" placeholder="Instructions" required></textarea><br><br>
+            <button onclick="addRecipe()">Save Recipe</button>
+            <button onclick="clearForm()">Clear Form</button>
+        </div>
+    </form>
+    <table id="recipe-table" class="hidden" border="2px" bg-color="black">
+        <thead>
+        <tr>
+            <th>Recipe Name</th>
+            <th>Ingredients</th>
+            <th>Instructions</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody id="recipe"></tbody>
+    </table>
+</div>
+</body>
+</html>
