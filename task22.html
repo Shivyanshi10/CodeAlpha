@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Scheduler</title>
+    <!-- Add Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-3">Task Scheduler</h1>
+        <form id="taskForm" class="form-floating">
+            <div class="mb-3">
+                <label for="taskName" class="form-label" >Task Name</label>
+                <input type="text" id="taskName" class="form-control" placeholder="taskname">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-control" placeholder="name@example.com">
+            </div>
+            <div class="mb-3">
+                <label for="taskDeadline" class="form-label">Task Deadline</label>
+                <input type="datetime-local" id="taskDeadline" class="form-control" placeholder="dd/mm/yyyy hh/ss">
+            </div>
+            <button type="submit" class="btn btn-primary">Add Task</button>
+        </form>
+        <ul id="taskList" class="list-group mt-3">
+        </ul>
+    </div>
+
+    <script>
+        document.getElementById("taskForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const taskName = document.getElementById("taskName").value;
+            const email = document.getElementById("email").value;
+            const taskDeadline = new Date(document.getElementById("taskDeadline").value).getTime();
+
+            const taskItem = document.createElement("li");
+            taskItem.className = "list-group-item";
+            taskItem.innerHTML = `
+                <strong>Task:</strong> ${taskName}<br>
+                <strong>Email:</strong> ${email}<br>
+                <strong>Deadline:</strong> ${new Date(taskDeadline).toLocaleString()}<br>
+                <button class="btn btn-success view-task" id="viewtask">View Task</button>
+            `;
+            
+            document.getElementById("taskList").appendChild(taskItem);
+
+            document.getElementById("taskName").value = "";
+            document.getElementById("email").value = "";
+            document.getElementById("taskDeadline").value = "";
+
+            // Set a timer to display the pop-up alert
+            const currentTime = new Date().getTime();
+            const timeToDeadline = taskDeadline - currentTime;
+
+            if (timeToDeadline > 0) {
+                setTimeout(function() {
+                    alert(`Task: ${taskName}\nEmail: ${email}\nDeadline: ${new Date(taskDeadline).toLocaleString()}`);
+                }, timeToDeadline);
+            }
+        });
+      
+    </script>
+
+    <!-- Add Bootstrap and JavaScript scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
